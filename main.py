@@ -130,6 +130,11 @@ class MnistModelBasic4:
 # training: 99.64%, dev: 99.31% (dev set performance within .1% difference between runs).
 # submissions/2019-02-21T13:24:36.717835.csv
 # Kaggle: 99.214%
+# TODO:
+#  - Try more epochs
+#  - Try adding regularization to the Dense neural layers
+#  - Are there regularization techniques for the Conv2D layers.
+#  - Try data augmentation?
 class MnistModelConv2D:
     """
     :type mnist_data: MnistDataCsv
