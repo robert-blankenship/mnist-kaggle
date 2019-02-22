@@ -21,4 +21,3 @@ class MnistModelBasic:
                   validation_split=validation_split)
 
         self.model = model
-

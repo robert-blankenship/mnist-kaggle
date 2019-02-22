@@ -49,9 +49,23 @@ class MnistDataCsv:
             labels = labels.reshape((num_images, 10))
             return labels
 
+    @staticmethod
+    def convert_images(images):
+        images_2d = []
+
+        for image in images:
+            # Grayscale, 28 by 28 pixel image with 1 channel.
+            images_2d.append(numpy.roll(image, 28).reshape((28, 28, 1)))
+
+        # numpy.set_printoptions(threshold=100)
+        # print images_2d[0].reshape((28, 28))
+        return numpy.array(images_2d, ndmin=4)
+
     def __init__(self, train_csv_path, test_csv_path):
-        self.images_train = self.get_images(train_csv_path)
-        self.images_train_2d = self.get_images_2d(self.images_train)
         self.labels_train = self.get_labels(train_csv_path)
 
+        self.images_train = self.get_images(train_csv_path)
+        self.images_train_2d = self.convert_images(self.images_train)
+
         self.images_test = self.get_images(test_csv_path, image_start_idx=0)
+        self.images_test_2d = self.convert_images(self.images_test)

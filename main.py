@@ -1,4 +1,3 @@
-# TODO: Reading all images at once seems to be pretty expensive.
 import datetime
 import logging
 from mnist_data_csv import MnistDataCsv
@@ -9,11 +8,11 @@ import os
 logging.getLogger().setLevel(logging.DEBUG)
 
 
-def generate_predictions_csv(model, images_test, output_csv_dir="submissions", uses_2d_images=False):
-    if uses_2d_images:
-        predictions = model.predict(mnist_models.conv_2d_v1.MnistModelConv2D.convert_images(images_test))
+def generate_predictions_csv(mnist_model, mnist_data, output_csv_dir="submissions"):
+    if hasattr(mnist_model, 'uses_2d_images') and mnist_model.uses_2d_images:
+        predictions = mnist_model.model.predict(mnist_data.images_test_2d)
     else:
-        predictions = model.predict(images_test)
+        predictions = mnist_model.model.predict(mnist_data.images_test)
 
     if not os.path.exists(output_csv_dir):
         os.mkdir(output_csv_dir)
@@ -39,19 +38,10 @@ def main():
     # generate_predictions_csv(model.model, mnist_data.images_test)
 
     model = mnist_models.conv_2d_v1.MnistModelConv2D(mnist_data)
-    generate_predictions_csv(model.model, mnist_data.images_test, uses_2d_images=model.uses_2d_images)
+    generate_predictions_csv(model, mnist_data)
 
     print model
 
 
 if __name__ == '__main__':
     main()
-
-
-    # for i in range(0, 100):
-    #     label = numpy.argmax(mnist_data.labels[i])
-    #     actual = network.predict(mnist_data.images[i:i+1])
-    #     actual_class = numpy.argmax(actual)
-    #     logging.debug("prediction={}, actual={}".format(label, actual_class))
-    #     logging.debug(mnist_data.labels[i])
-    #     logging.debug(actual)

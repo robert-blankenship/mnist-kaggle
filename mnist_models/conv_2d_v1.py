@@ -1,4 +1,3 @@
-import numpy
 import tensorflow
 
 
@@ -11,13 +10,14 @@ import tensorflow
 #  - Try adding regularization to the Dense neural layers
 #  - Are there regularization techniques for the Conv2D layers.
 #  - Try data augmentation?
-class MnistModelConv2D:
+class MnistModelConv2D():
+    uses_2d_images = True
+
     """
     :type mnist_data: MnistDataCsv
     """
-    uses_2d_images = True
-
-    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.leaky_relu, validation_split=0.1):
+    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.leaky_relu,
+                 validation_split=0.1):
         model = tensorflow.keras.Sequential()
 
         layers = [
@@ -38,21 +38,6 @@ class MnistModelConv2D:
         model.compile(optimizer=tensorflow.train.AdamOptimizer(),
                       loss=tensorflow.keras.losses.mean_squared_error,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
-        model.fit(self.convert_images(mnist_data.images_train), mnist_data.labels_train, epochs=10,
+        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=1,
                   batch_size=32, validation_split=validation_split)
         self.model = model
-
-    @staticmethod
-    def convert_images(images):
-        images_2d = []
-
-        for image in images:
-            # Grayscale, 28 by 28 pixel image with 1 channel.
-            images_2d.append(numpy.roll(image, 28).reshape((28, 28, 1)))
-
-        # numpy.set_printoptions(threshold=100)
-        # print images_2d[0].reshape((28, 28))
-
-        return numpy.array(images_2d, ndmin=4)
-
-
