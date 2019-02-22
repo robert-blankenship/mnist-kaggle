@@ -10,7 +10,7 @@ import tensorflow
 #  - Try adding regularization to the Dense neural layers
 #  - Are there regularization techniques for the Conv2D layers.
 #  - Try data augmentation?
-class MnistModelConv2D():
+class MnistModelConv2DV2():
     uses_2d_images = True
 
     """
@@ -29,14 +29,14 @@ class MnistModelConv2D():
             tensorflow.keras.layers.MaxPool2D(),
             tensorflow.keras.layers.Flatten(),
             tensorflow.keras.layers.Dense(100, activation=activation_function),
-            tensorflow.keras.layers.Dense(10, activation=tensorflow.nn.softmax)
+            tensorflow.keras.layers.Dense(10, activation=activation_function)
         ]
 
         for layer in layers:
             model.add(layer)
 
         model.compile(optimizer=tensorflow.train.AdamOptimizer(),
-                      loss=tensorflow.keras.losses.categorical_crossentropy,
+                      loss=tensorflow.keras.losses.mean_squared_error,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
         model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=1,
                   batch_size=32, validation_split=validation_split)

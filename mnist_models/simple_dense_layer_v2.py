@@ -24,9 +24,9 @@ class MnistModelBasic2:
         model.add(tensorflow.keras.layers.Dense(30, activation=activation_function)),
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Dropout(0.2))
-        model.add(tensorflow.keras.layers.Dense(10, activation=activation_function))
+        model.add(tensorflow.keras.layers.Dense(10, activation=tensorflow.nn.softmax))
         model.compile(optimizer=tensorflow.train.AdamOptimizer(),
-                      loss=tensorflow.keras.losses.mean_squared_error,
+                      loss=tensorflow.keras.losses.categorical_crossentropy,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
         model.fit(mnist_data.images_train, mnist_data.labels_train, epochs=epochs, batch_size=32,
                   validation_split=validation_split)
