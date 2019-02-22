@@ -2,21 +2,19 @@ import tensorflow
 
 
 # Amazing performance, and very low variance!
-# training: 99.64%, dev: 99.31% (dev set performance within .1% difference between runs).
-# submissions/2019-02-21T13:24:36.717835.csv
-# Kaggle: 99.214%
+# training: 99.98%, dev: 100.0% (dev set performance within .02% difference between runs).
+# submissions/2019-02-22T06:50:25.171165.csv
 # TODO:
-#  - Try more epochs
 #  - Try adding regularization to the Dense neural layers
 #  - Are there regularization techniques for the Conv2D layers.
 #  - Try data augmentation?
-class MnistModelConv2DV2():
+class MnistModelConv2D_v2:
     uses_2d_images = True
 
     """
     :type mnist_data: MnistDataCsv
     """
-    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.leaky_relu,
+    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.relu,
                  validation_split=0.1):
         model = tensorflow.keras.Sequential()
 
@@ -35,9 +33,15 @@ class MnistModelConv2DV2():
         for layer in layers:
             model.add(layer)
 
-        model.compile(optimizer=tensorflow.train.AdamOptimizer(),
+        model.compile(optimizer=tensorflow.train.AdamOptimizer(.01),
                       loss=tensorflow.keras.losses.mean_squared_error,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
-        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=1,
-                  batch_size=32, validation_split=validation_split)
+        model = tensorflow.contrib.tpu.keras_to_tpu_model(
+            model,
+            strategy=tensorflow.contrib.tpu.TPUDistributionStrategy(
+                tensorflow.contrib.cluster_resolver.TPUClusterResolver("node-1")))
+
+        # May need to use different labels for softmax
+        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=50,
+                  batch_size=512, validation_split=validation_split)
         self.model = model

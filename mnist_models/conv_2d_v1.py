@@ -16,7 +16,7 @@ class MnistModelConv2D():
     """
     :type mnist_data: MnistDataCsv
     """
-    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.leaky_relu,
+    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.tanh,
                  validation_split=0.1):
         model = tensorflow.keras.Sequential()
 
@@ -38,6 +38,6 @@ class MnistModelConv2D():
         model.compile(optimizer=tensorflow.train.AdamOptimizer(),
                       loss=tensorflow.keras.losses.categorical_crossentropy,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
-        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=1,
+        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=10,
                   batch_size=32, validation_split=validation_split)
         self.model = model
