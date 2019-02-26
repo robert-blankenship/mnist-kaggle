@@ -14,8 +14,8 @@ class MnistModelConv2D_v2:
     """
     :type mnist_data: MnistDataCsv
     """
-    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.relu,
-                 validation_split=0.1):
+    def __init__(self, mnist_data, filters=5, kernel_size=3, activation_function=tensorflow.nn.tanh,
+                 validation_split=0.2):
         model = tensorflow.keras.Sequential()
 
         layers = [
@@ -33,7 +33,7 @@ class MnistModelConv2D_v2:
         for layer in layers:
             model.add(layer)
 
-        model.compile(optimizer=tensorflow.train.AdamOptimizer(.01),
+        model.compile(optimizer=tensorflow.train.AdamOptimizer(),
                       loss=tensorflow.keras.losses.mean_squared_error,
                       metrics=[tensorflow.keras.metrics.categorical_accuracy])
         model = tensorflow.contrib.tpu.keras_to_tpu_model(
@@ -42,6 +42,6 @@ class MnistModelConv2D_v2:
                 tensorflow.contrib.cluster_resolver.TPUClusterResolver("node-1")))
 
         # May need to use different labels for softmax
-        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=50,
-                  batch_size=512, validation_split=validation_split)
+        model.fit(mnist_data.images_train_2d, mnist_data.labels_train, epochs=100,
+                  batch_size=1024, validation_split=validation_split)
         self.model = model

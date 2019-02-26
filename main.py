@@ -2,6 +2,7 @@ import datetime
 import logging
 from mnist_data_csv import MnistDataCsv
 import mnist_models.conv_2d_v2
+# import mnist_models.simple_dense_layer_v1
 import numpy
 import os
 
@@ -29,11 +30,10 @@ def main():
     # Reading the csv is kind of slow!
     mnist_data = MnistDataCsv(train_csv_path="data/train.csv", test_csv_path="data/test.csv")
 
-    # model = mnist_models.simple_dense_layer_v1.MnistModelBasic(mnist_data, epochs=10)
+    # model = mnist_models.simple_dense_layer_v1.MnistModelBasic(mnist_data, epochs=1)
     # model = MnistModelBasic2(mnist_data)
     # model = MnistModelBasic3(mnist_data)
     # model = MnistModelBasic4(mnist_data)
-    # generate_predictions_csv(model, mnist_data)
 
     # model = mnist_models.conv_2d_v1.MnistModelConv2D(mnist_data)
     model = mnist_models.conv_2d_v2.MnistModelConv2D_v2(mnist_data)
